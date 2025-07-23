@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,13 +7,92 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 
 interface ITodo {
-  id: number;
+  id: string;
   task: string;
   isDone: boolean;
 }
 const TodoPage = () => {
-  const [todos, setTodos] = useState<ITodo[]>([]);
   const inputTaskRef = useRef<HTMLInputElement>(null);
+  const [todos, setTodos] = useState<ITodo[]>([]);
+
+  const onBtAdd = () => {
+    if (inputTaskRef.current?.value) {
+      // - Generate new ID
+      const newID = new Date().getTime() + Math.random() * 10;
+      // - Prepare newData
+      const newData: ITodo = {
+        id: newID.toString(),
+        task: inputTaskRef.current.value,
+        isDone: false,
+      };
+      // - Store data to state
+      setTodos([...todos, newData]);
+      // - Reset form input
+      inputTaskRef.current.value = "";
+    } else {
+      alert("Isi form todo");
+    }
+  };
+
+  const onBtDelete = (id: string) => {
+    // Cara 1
+    // setTodos(todos.filter((val: ITodo) => val.id !== id));
+
+    // Cara 2
+    const temp: ITodo[] = [...todos];
+    const findIdx: number = temp.findIndex((val: ITodo) => val.id === id);
+    temp.splice(findIdx, 1);
+    setTodos(temp);
+  };
+
+  const onBtIsDone = (id: string) => {
+    setTodos(
+      todos.map((value: ITodo) => {
+        if (value.id === id) {
+          return { ...value, isDone: !value.isDone };
+        } else {
+          return value;
+        }
+      })
+    );
+  };
+
+  const printData = () => {
+    return todos.map((value: ITodo) => {
+      return (
+        <li
+          key={value.id}
+          className="flex justify-between items-center py-2 border-b"
+        >
+          <div className="flex items-center gap-4">
+            <Checkbox
+              checked={value.isDone}
+              className="rounded-full w-6 h-6 border-2 border-gray-400"
+              onClick={() => onBtIsDone(value.id)}
+            />
+            <span>{value.task}</span>
+          </div>
+          <Button
+            type="button"
+            className="p-0 w-8 h-8 rounded-full"
+            onClick={() => onBtDelete(value.id)}
+          >
+            <Trash size={24} />
+          </Button>
+        </li>
+      );
+    });
+  };
+
+  const handleTheme = (): void => {
+    if (typeof window !== "undefined") {
+      if (localStorage.getItem("theme") === "dark") {
+        localStorage.setItem("theme", "light");
+      } else {
+        localStorage.setItem("theme", "dark");
+      }
+    }
+  };
 
   return (
     <div>
@@ -29,8 +107,20 @@ const TodoPage = () => {
           <h1 className="text-4xl font-bold tracking-widest text-white">
             Todo
           </h1>
-          <Button variant="ghost" size="icon" type="button">
-            <Moon size={24} />
+          <Button
+            variant="ghost"
+            size="icon"
+            type="button"
+            onClick={() => {
+              handleTheme();
+            }}
+          >
+            {typeof window !== "undefined" &&
+            localStorage.getItem("theme") === "light" ? (
+              <Sun size={24} />
+            ) : (
+              <Moon size={24} />
+            )}
           </Button>
         </div>
       </div>
@@ -45,7 +135,11 @@ const TodoPage = () => {
                 className="py-6 border-none shadow-none"
                 ref={inputTaskRef}
               />
-              <Button type="button" className="absolute top-1/7 right-4">
+              <Button
+                type="button"
+                className="absolute top-1/7 right-4"
+                onClick={onBtAdd}
+              >
                 Add Task
               </Button>
             </div>
@@ -54,7 +148,7 @@ const TodoPage = () => {
 
         <Card className="w-full mt-4 shadow-lg">
           <CardContent className="p-5">
-            <ul></ul>
+            <ul id="print">{printData()}</ul>
 
             <div className="flex justify-between text-sm text-gray-500 mt-4">
               <span>0 items left</span>

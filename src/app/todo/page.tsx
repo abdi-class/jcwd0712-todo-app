@@ -1,10 +1,11 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun, Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ThemeContext } from "@/contexts/ThemeContext";
 
 interface ITodo {
   id: string;
@@ -12,6 +13,9 @@ interface ITodo {
   isDone: boolean;
 }
 const TodoPage = () => {
+  // use context
+  const { theme, setTheme } = useContext(ThemeContext);
+
   const inputTaskRef = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<ITodo[]>([]);
 
@@ -85,12 +89,10 @@ const TodoPage = () => {
   };
 
   const handleTheme = (): void => {
-    if (typeof window !== "undefined") {
-      if (localStorage.getItem("theme") === "dark") {
-        localStorage.setItem("theme", "light");
-      } else {
-        localStorage.setItem("theme", "dark");
-      }
+    if (theme === "light") {
+      setTheme("dark");
+    } else {
+      setTheme("light");
     }
   };
 
@@ -115,12 +117,7 @@ const TodoPage = () => {
               handleTheme();
             }}
           >
-            {typeof window !== "undefined" &&
-            localStorage.getItem("theme") === "light" ? (
-              <Sun size={24} />
-            ) : (
-              <Moon size={24} />
-            )}
+            {theme === "light" ? <Sun size={24} /> : <Moon size={24} />}
           </Button>
         </div>
       </div>

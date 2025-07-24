@@ -6,6 +6,7 @@ import { Moon, Sun, Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ThemeContext } from "@/contexts/ThemeContext";
+import axios from "axios";
 
 interface ITodo {
   id: string;
@@ -18,6 +19,24 @@ const TodoPage = () => {
 
   const inputTaskRef = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<ITodo[]>([]);
+
+  // get data from API
+  const getTodos = () => {
+    axios
+      .get("https://amiableday-us.backendless.app/api/data/todos")
+      .then((res) => {
+        console.log(res.data);
+        // store data to state
+        setTodos(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getTodos();
+  }, []);
 
   const onBtAdd = () => {
     if (inputTaskRef.current?.value) {

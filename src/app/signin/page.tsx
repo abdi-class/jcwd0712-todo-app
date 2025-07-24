@@ -14,10 +14,11 @@ const SigninPage = () => {
         "https://amiableday-us.backendless.app/api/data/accounts",
         {
           params: {
-            where: `'email'='${inputEmailRef.current?.value}' AND 'password'='${inputPasswordRef.current?.value}'`,
+            where: `email='${inputEmailRef.current?.value}' AND password='${inputPasswordRef.current?.value}'`,
           },
         }
       );
+      console.log(result.data);
 
       alert(`Selamat datang ${result.data[0].email}`);
     } catch (error) {

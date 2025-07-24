@@ -51,7 +51,7 @@ const TodoPage = () => {
           task: inputTaskRef.current.value,
         }
       );
-
+      getTodos();
       inputTaskRef.current.value = "";
     } else {
       alert("Isi form todo");

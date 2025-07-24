@@ -43,19 +43,15 @@ const TodoPage = () => {
     getTodos();
   }, []);
 
-  const onBtAdd = () => {
+  const onBtAdd = async () => {
     if (inputTaskRef.current?.value) {
-      // - Generate new ID
-      const newID = new Date().getTime() + Math.random() * 10;
-      // - Prepare newData
-      const newData: ITodo = {
-        id: newID.toString(),
-        task: inputTaskRef.current.value,
-        isDone: false,
-      };
-      // - Store data to state
-      setTodos([...todos, newData]);
-      // - Reset form input
+      const createAccount = await axios.post(
+        "https://amiableday-us.backendless.app/api/data/todos",
+        {
+          task: inputTaskRef.current.value,
+        }
+      );
+
       inputTaskRef.current.value = "";
     } else {
       alert("Isi form todo");

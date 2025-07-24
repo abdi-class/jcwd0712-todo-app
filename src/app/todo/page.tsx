@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ThemeContext } from "@/contexts/ThemeContext";
 import axios from "axios";
 import { useLangStore } from "@/lib/store/langStore";
+import Link from "next/link";
 
 interface ITodo {
   id: string;
@@ -129,9 +130,11 @@ const TodoPage = () => {
       >
         <div className="absolute inset-0 bg-gradient-to-b from-purple-500 to-transparent -z-40" />
         <div className="absolute top-10 left-1/2 transform -translate-x-1/2 flex justify-between w-[40rem]">
-          <h1 className="text-4xl font-bold tracking-widest text-white">
-            Todo
-          </h1>
+          <Link href="/">
+            <h1 className="text-4xl font-bold tracking-widest text-white">
+              Todo
+            </h1>
+          </Link>
           <div>
             <Button
               variant="ghost"

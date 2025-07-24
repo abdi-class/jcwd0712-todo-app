@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ThemeContext } from "@/contexts/ThemeContext";
 import axios from "axios";
+import { useLangStore } from "@/lib/store/langStore";
 
 interface ITodo {
   id: string;
@@ -14,8 +15,11 @@ interface ITodo {
   isDone: boolean;
 }
 const TodoPage = () => {
-  // use context
+  // use global state context
   const { theme, setTheme } = useContext(ThemeContext);
+
+  // use global state zustand
+  const { lang, setLang } = useLangStore();
 
   const inputTaskRef = useRef<HTMLInputElement>(null);
   const [todos, setTodos] = useState<ITodo[]>([]);
@@ -128,16 +132,33 @@ const TodoPage = () => {
           <h1 className="text-4xl font-bold tracking-widest text-white">
             Todo
           </h1>
-          <Button
-            variant="ghost"
-            size="icon"
-            type="button"
-            onClick={() => {
-              handleTheme();
-            }}
-          >
-            {theme === "light" ? <Sun size={24} /> : <Moon size={24} />}
-          </Button>
+          <div>
+            <Button
+              variant="ghost"
+              size="icon"
+              type="button"
+              onClick={() => {
+                handleTheme();
+              }}
+            >
+              {theme === "light" ? <Sun size={24} /> : <Moon size={24} />}
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              type="button"
+              className="uppercase"
+              onClick={() => {
+                if (lang === "en") {
+                  setLang("id");
+                } else {
+                  setLang("en");
+                }
+              }}
+            >
+              {lang}
+            </Button>
+          </div>
         </div>
       </div>
 

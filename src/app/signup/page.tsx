@@ -26,13 +26,13 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="w-64 border shadow rounded-lg">
+    <div className="w-64 m-auto my-40 p-5 border shadow rounded-lg">
       <h1 className="text-3xl">Signup</h1>
-      <div>
+      <div className="my-4">
         <label>Email</label>
         <Input type="email" placeholder="Type email" ref={inputEmailRef} />
       </div>
-      <div>
+      <div className="my-4">
         <label>Password</label>
         <Input
           type="password"
@@ -40,7 +40,7 @@ const SignupPage = () => {
           ref={inputPasswordRef}
         />
       </div>
-      <div>
+      <div className="my-4">
         <label>Confirmation Password</label>
         <Input
           type="password"
@@ -48,7 +48,7 @@ const SignupPage = () => {
           ref={inputConfirmPasswordRef}
         />
       </div>
-      <Button type="button" onClick={onSignup}>
+      <Button type="button" onClick={onSignup} className="w-full">
         Submit
       </Button>
     </div>
